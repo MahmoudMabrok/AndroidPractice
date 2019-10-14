@@ -1,0 +1,84 @@
+package learning.mahmoudmabrok.englishtime.feature.feature.formSentace
+
+import android.content.Context
+import android.os.Build
+import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.util.Log
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.activity_form_sentence.*
+import learning.mahmoudmabrok.englishtime.R
+import learning.mahmoudmabrok.englishtime.feature.datalayer.LocalDB
+import learning.mahmoudmabrok.englishtime.feature.models.Sentence
+import learning.mahmoudmabrok.englishtime.feature.utils.ListsOpt
+import learning.mahmoudmabrok.englishtime.feature.utils.setValue
+
+
+class FormSentence : AppCompatActivity() {
+
+    private lateinit var db: LocalDB
+    private val TAG: String = "FormSentence"
+    private lateinit var adapterTop: SentenceAdapter
+    private lateinit var adapterBottom: SentenceAdapter
+    private lateinit var sentences: MutableList<Sentence>
+
+    var currentSentence = 0
+    var score = 0
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_form_sentence)
+        setUpSentences()
+        initRv()
+        loadSentence()
+        tvScoreForm.setMessage("Score:: ")
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadScore()
+    }
+
+    private fun loadScore() {
+        db = LocalDB.getINSTANCE(this)
+        score = db.score
+        tvScoreForm.setValue(score, 1500)
+    }
+    override fun onPause() {
+        super.onPause()
+        db.score = score
+    }
+
+    private fun initRv() {
+        // make rv to be filled from user
+        adapterTop = SentenceAdapter()
+        adapterTop.setSentenceList(listOf())
+        rvEnglishTo.setHasFixedSize(true)
+        rvEnglishTo.adapter = adapterTop
+        val lManager2 = LinearLayoutManager(this)
+        lManager2.orientation = RecyclerView.VERTICAL
+        rvEnglishTo.layoutManager = lManager2
+        // make given rv
+        adapterBottom = SentenceAdapter()
+        adapterBottom.setSentenceList(listOf())
+        rvEnglishFrom.setHasFixedSize(true)
+        rvEnglishFrom.adapter = adapterBottom
+        val lManager = LinearLayoutManager(this)
+        lManager.orientation = RecyclerView.VERTICAL
+        rvEnglishFrom.layoutManager = lManager
+        // Animations
+
+        // listener for each rv
+        adapterBottom.setSentenceListener { pos, item ->
+            adapterBottom.removeSentence(pos)
+            adapterTop.addSentence(item)
+            // check if it be full
+            if (adapterBottom.itemCount == 0) {
+                val ans = adapterTop.fullSentence
+                val q = sentences[currentSentence - 1].enSentence
+                if (ans == q)
