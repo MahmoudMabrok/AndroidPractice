@@ -26,10 +26,14 @@ public class Act1 extends AppCompatActivity {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate: ");
+        onViewClicked();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_act1);
         ButterKnife.bind(this);
         Log.d(TAG, "onCreate: ");
+
+        onViewClicked();
     }
 
     /**

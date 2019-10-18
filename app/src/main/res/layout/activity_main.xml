@@ -13,5 +13,12 @@
         android:layout_marginBottom="16dp"
         android:text="LifeCycle" />
 
+    <Button
+        android:id="@+id/btnOpenTestDagger"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="TestDagger" />
+
 
 </LinearLayout>
