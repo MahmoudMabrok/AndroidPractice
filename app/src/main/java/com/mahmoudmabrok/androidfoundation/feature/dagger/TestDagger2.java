@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class TestDagger2 extends AppCompatActivity {
 
-    private static final String TAG = "TestDagger2";
+  
     @Inject
     Car car;
     @Inject
